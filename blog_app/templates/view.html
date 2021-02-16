@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>"Thee Disc Golf Newbie"</title>
+    </head>
+    <body>
+        <!-- if session is user
+            display <a href='/'>homepage</a> link back to homepage -->
+        <main>
+            <h1>Welcome to Thee Disc Golf Newbie!</h1>
+            <p>Thee Disc Golf Newbie is personal blog created to share how playing disc golf has enriched my life. By sharing, I hope to help grow this incredible sport!</p>
+            <img src="" alt="">
+            <img src="" alt="">
+            <img src="" alt="">
+            <img src="" alt="">
+            <div id="nav-bar">
+                <img src="" alt="">
+                <a href="">How to play</a>
+                <a href="">In my bag</a>
+                <a href="">Swag</a>
+            </div>
+            <div id="post-window">
+                <h2>Recent Posts</h2>
+                {% for post in all_posts %}
+                <div id="ind-post">
+                    <h3><a href="">{{post.title}}</a></h3>
+                    <h4>{{post.created_at}}</h4>
+                    <p>{{post.content}}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+
+    </body>
+</html>
