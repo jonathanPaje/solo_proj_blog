@@ -12,6 +12,8 @@ def login_page(request):
     return render(request, "login.html")
 def home(request):
     return render(request,"home.html")
+def create_page(request):
+    return render (request,'create_post.html')
 
 def register(request):
     if request.method == "GET":
@@ -39,3 +41,20 @@ def login(request):
 def logout(request):
     request.session.clear()
     return redirect('/')
+
+def create_post(request):
+    if request.method == "GET":
+        return redirect('/home')
+    errors = Posts.objects.validate(request.POST)
+    if errors:
+        for e in errors.values():
+            messages.error(request, e)
+        return redirect('/home')
+    else:
+        user = User.objects.get(id=request.session['user_id'])
+        post = Posts.objects.create(
+            quoter = request.POST['title'],
+            quote = request.POST['content'],
+            uploaded_by = user,
+        )
+        return redirect('/home')

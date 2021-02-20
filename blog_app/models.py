@@ -42,11 +42,25 @@ class User(models.Model):
     password = models.CharField(max_length=30)
     objects = Log_Reg_Manager()
 
+
+class PostManager(models.Manager):
+    
+    def validate(self, form):
+        errors = {}
+        if len(form['title']) < 1:
+            errors["quoter"] = "You must add a writer of the quote, if you do not know enter ANONYMOUS"
+        if len(form['content']) < 1:
+            errors["quote"] = "Please enter your favorite quote"
+        
+        return errors
+
 class Posts(models.Model):
     title = models.CharField(max_length = 100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    posted_by = models.ForeignKey(User, related_name='user_post', on_delete = models.CASCADE)
+    objects = PostManager()
 
 class Comments(models.Model):
     name = models.CharField(max_length = 100)

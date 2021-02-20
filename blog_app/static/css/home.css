@@ -1,0 +1,31 @@
+#logo{
+    width: 125px;
+    height: 125px;
+    display: inline;
+}
+.callout.primary{
+    background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),url(../img/golfer.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 425px;
+    background-color: black;
+}
+.callout>:first-child{
+    margin-top: 100px;
+}
+#title-text{
+    color: white;
+}
+.top-bar{
+    display: inline-flex;
+}
+.menu{
+    display: inline;
+}
+.callout.primary a{
+    color: whitesmoke;
+}
