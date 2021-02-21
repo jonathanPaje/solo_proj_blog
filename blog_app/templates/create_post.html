@@ -11,17 +11,19 @@
         <p>{{date}}</p>
         </header>
         <main>
-            {% if messages %}
+                {% if messages %}
             <ul class="validations">
                 {% for messages in messages %}
                 <li {% if message.tags %} class = "{{ message.tags }}"{% endif %}>{{messages}}</li>
-            {% endfor %}
+                {% endfor %}
             </ul>
-            <form action="/create" method="post">
+                {% endif %}
+            <form action="/create-post" method="POST" enctype="multipart/form-data">
                 {%csrf_token%}
                 <h1>Give your Post a Title</h1>
                 <textarea name="title" id="title" cols="30" rows="10"></textarea>
                 <h1>Write your content below</h1>
+                <!-- {{form.media}} -->
                 <textarea name="content" id="content" cols="30" rows="10"></textarea>
                 <button type="submit">POST</button>
             </form>

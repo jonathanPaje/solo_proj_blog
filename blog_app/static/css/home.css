@@ -29,3 +29,14 @@
 .callout.primary a{
     color: whitesmoke;
 }
+.comment-by{
+    font-size: 12px;
+    color: blue;
+}
+.comment-date{
+    font-size: smaller;
+    color: cadetblue;
+}
+.comment-content{
+    font-size: inherit;
+}

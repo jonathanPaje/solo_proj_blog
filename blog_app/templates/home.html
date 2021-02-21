@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Foundation | Welcome</title>
+    <title>Eat, Sleep, DiscGolf | Welcome</title>
     <link rel="stylesheet" href="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
     {%load static%}
     <link rel="stylesheet" href="{% static 'css/home.css' %}"> 
@@ -16,10 +16,10 @@
         <img id="logo" src="../static/img/basket-BW.png" alt="image of logo">
         <div class="row column text-center">
             <ul class= "menu">
-                <li><a href="/create">Create Post</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Logout</a></li>
+                <li><a data-open="CreatePost-Modal">Create Post</a></li>
+                <li><a href="https://www.pdga.com/rules/official-rules-disc-golf/800">How to Play</a></li>  
+                <li><a data-open="About-Modal">About</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
         </div>
 
@@ -28,89 +28,89 @@
 
     <div class="row" id="content">
       <div class="medium-8 columns">
+        {% for post in posts %}
         <div class="blog-post">
-          <h3>Awesome blog post title <small>3/6/2015</small></h3>
-          <img class="thumbnail" src="https://placehold.it/850x350">
-          <p>Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus.</p>
-          <div class="callout">
-            <ul class="menu simple">
-              <li><a href="#">Author: Mike Mikers</a></li>
-              <li><a href="#">Comments: 3</a></li>
-            </ul>
-          </div>
+            <h3>{{post.title}} <small>{{post.created_at}}</small></h3>
+            <img class="thumbnail" src="https://placehold.it/850x350">
+            <p>{{post.content}}</p>
+            <div class="callout">
+                <ul class="menu simple">
+                <li><a href="#">Author: {{post.posted_by.user_name}}</a></li>
+                <li><form action="/likeOnHome/{{post.id}}" method="POST">
+                    {%csrf_token%}
+                    {% if post in user.liked_posts.all %} 
+                        <button type="submit", name="post_id", value="{{post_id}}", class="hollow button warning"> Likes:{{post.likes.count}} &#128078</button>
+                    {% else %}                                    
+                        <button type="submit", name="post_id", value="{{post_id}}", class="hollow button success">Likes:{{post.likes.count}} &#128077</button>
+                    {% endif %}
+                </form></li>
+                <li><a href="/details/{{post.id}}">Comments: {{post.comments.count}}</a></li>
+                </ul>
+            </div>      
         </div>
-
-        <div class="blog-post">
-          <h3>Awesome blog post title <small>3/6/2015</small></h3>
-          <img class="thumbnail" src="https://placehold.it/850x350">
-          <p>Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus.</p>
-          <div class="callout">
-            <ul class="menu simple">
-              <li><a href="#">Author: Mike Mikers</a></li>
-              <li><a href="#">Comments: 3</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="blog-post">
-          <h3>Awesome blog post title <small>3/6/2015</small></h3>
-          <img class="thumbnail" src="https://placehold.it/850x350">
-          <p>Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus.</p>
-          <div class="callout">
-            <ul class="menu simple">
-              <li><a href="#">Author: Mike Mikers</a></li>
-              <li><a href="#">Comments: 3</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="blog-post">
-          <h3>Awesome blog post title <small>3/6/2015</small></h3>
-          <img class="thumbnail" src="https://placehold.it/850x350">
-          <p>Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus.</p>
-          <div class="callout">
-            <ul class="menu simple">
-              <li><a href="#">Author: Mike Mikers</a></li>
-              <li><a href="#">Comments: 3</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="medium-3 columns" data-sticky-container>
+        {% endfor %}
+    </div>
+    <div class="medium-3 columns" data-sticky-container>
         <div class="sticky" data-sticky data-anchor="content">
-          <h4>Categories</h4>
-          <ul>
-            <li><a href="#">Skyler</a></li>
-            <li><a href="#">Jesse</a></li>
-            <li><a href="#">Mike</a></li>
-            <li><a href="#">Holly</a></li>
-          </ul>
-
-          <h4>Authors</h4>
-          <ul>
-            <li><a href="#">Skyler</a></li>
-            <li><a href="#">Jesse</a></li>
-            <li><a href="#">Mike</a></li>
-            <li><a href="#">Holly</a></li>
-          </ul>
+            <h4>All Authors</h4>
+            <ul>
+                {% for user in all_users%}
+                <li><a href="#">{{user.user_name}}</a></li>
+                {% endfor %}
+            </ul>
         </div>
       </div>
     </div>
 
     <div class="row column">
-      <ul class="pagination" role="navigation" aria-label="Pagination">
-        <li class="disabled">Previous</li>
-        <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-        <li><a href="#" aria-label="Page 2">2</a></li>
-        <li><a href="#" aria-label="Page 3">3</a></li>
-        <li><a href="#" aria-label="Page 4">4</a></li>
-        <li class="ellipsis"></li>
-        <li><a href="#" aria-label="Page 12">12</a></li>
-        <li><a href="#" aria-label="Page 13">13</a></li>
-        <li><a href="#" aria-label="Next page">Next</a></li>
-      </ul>
+            <ul class="pagination" role="navigation" aria-label="Pagination">
+            <li class="disabled">Previous</li>
+            <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
+            <li><a href="#" aria-label="Page 2">2</a></li>
+            <li><a href="#" aria-label="Page 3">3</a></li>
+            <li><a href="#" aria-label="Page 4">4</a></li>
+            <li class="ellipsis"></li>
+            <li><a href="#" aria-label="Page 12">12</a></li>
+            <li><a href="#" aria-label="Page 13">13</a></li>
+            <li><a href="#" aria-label="Next page">Next</a></li>
+        </ul>
     </div>
+    <div class="reveal" id="About-Modal" data-reveal>
+        <h1>About</h1>
+        <p class="lead">Are you someone who is slightly obsessed about disc golf (whether PRO or Ameteur) and you do not have a place to express share thoughts and ideas. Eat, Sleep, DiscGolf is the perfect place to share anything and everything related to disc golf.</p>
+        <p class="lead">Here you can post and read about favorite courses, discs, PDGA players, field work routines, and how you love to disc golf.Lets expand the sport of disc golf together!</p>
+        <h3>Coming soon!</h3>
+        <ul>
+            <li>API from PDGA: link your PDGA to your username, share stats, look up courses, track your favorite PDGA Pro</li>
+            <li>Upload images</li>
+            <li>Rich Text editor for posts</li>
+        </ul>
 
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="reveal" id="CreatePost-Modal" data-reveal>
+        {% if messages %}
+        <ul class="validations">
+            {% for messages in messages %}
+            <li {% if message.tags %} class = "{{ message.tags }}"{% endif %}>{{messages}}</li>
+            {% endfor %}
+        </ul>
+            {% endif %}
+        <form action="/create-post" method="post">
+            {%csrf_token%}
+            <h1>Give your Post a Title</h1>
+            <textarea name="title" id="title" cols="30" rows="10"></textarea>
+            <h1>Write your content below</h1>
+            <textarea name="content" id="content" cols="30" rows="10"></textarea>
+            <button class='success button' type="submit">POST</button>
+        </form>
+
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <script src="/js/vendor/jquery.js"></script>
     <script src="/js/vendor/fastclick.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>

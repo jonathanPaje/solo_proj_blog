@@ -1,4 +1,6 @@
 from django.db import models
+# from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 import re
 import bcrypt
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
@@ -48,23 +50,33 @@ class PostManager(models.Manager):
     def validate(self, form):
         errors = {}
         if len(form['title']) < 1:
-            errors["quoter"] = "You must add a writer of the quote, if you do not know enter ANONYMOUS"
+            errors["quoter"] = "Don't forget a title"
         if len(form['content']) < 1:
-            errors["quote"] = "Please enter your favorite quote"
+            errors["quote"] = "Add content to your post"
         
         return errors
 
 class Posts(models.Model):
+    header_image = models.ImageField(null=True, blank =True, upload_to="images/")
     title = models.CharField(max_length = 100)
-    content = models.TextField()
+    content = RichTextField(blank=True, null=True)
+    # content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    posted_by = models.ForeignKey(User, related_name='user_post', on_delete = models.CASCADE)
+    posted_by = models.ForeignKey(User, related_name='user_post',  on_delete = models.CASCADE)
     objects = PostManager()
+    likes = models.ManyToManyField(User, related_name="liked_posts")
+
+    def __repr__(self):
+        return self.title + '|' + str(self.posted_by)
+
 
 class Comments(models.Model):
-    name = models.CharField(max_length = 100)
     content = models.TextField()
     post = models.ForeignKey(Posts, related_name="comments", on_delete = models.CASCADE)
+    commented_by = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Comment object: from:{self.commented_by} on {self.post} post"
