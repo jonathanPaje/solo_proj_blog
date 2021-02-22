@@ -1,13 +1,29 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.views.generic import ListView, DetailView, CreateView
 import datetime
 from .models import User, Posts, Comments
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 # Create your views here.
+
+def allUsersPosts(request, id):
+    if 'user_id' not in request.session:
+        return redirect('/login')
+    user = User.objects.get(id=request.session['user_id'])
+    user1 = User.objects.get(id=id)
+    post1 = Posts.objects.filter(posted_by=user1)
+    context={
+        'user': user,
+        'userPosts': user1,
+        'posts' : post1.all().order_by('-created_at'),
+        'all_users':User.objects.all()
+    }
+    return render(request, "usersallpost.html", context)
+
 def create_comment(request, id):
     if 'user_id' not in request.session:
-        return redirect('/')
+        return redirect('/login_page')
     if request.method == "POST":
         user = User.objects.get(id=request.session['user_id'])
         post = Posts.objects.get(id=id)
@@ -51,12 +67,19 @@ def likeDetails(request, id):
         liked = True
     return redirect(f'/details/{post.id}')
 
+def likeAllposts(request, id1, id2):
+    user = User.objects.get(id=request.session['user_id'])
+    post = Posts.objects.get(id = id1)
+    user1 = User.objects.get(id = id2)
+    liked = False
+    if post.likes.filter(id=user.id).exists():
+        post.likes.remove(user)
+        liked = False
+    else:
+        post.likes.add(user)
+        liked = True
+    return redirect(f'/allposts/{user1.id}')
 
-# def unlike(request, id):
-#     user= User.objects.get(id=request.session['user_id'])
-#     post = Posts.objects.get(id=id)
-#     user.liked_posts.remove(post)
-#     return redirect(f'/home')
 
 def create_post(request):
     if request.method == "GET":
@@ -69,18 +92,19 @@ def create_post(request):
     else:
         user = User.objects.get(id=request.session['user_id'])
         Posts.objects.create(
+            header_image = request.FILES['header_image'],
             title = request.POST['title'],
             content = request.POST['content'],
             posted_by = user,
         )
         return redirect('/home')
+
 def create_page(request):
     return render (request,'create_post.html')
 
 def home(request):
     if 'user_id' not in request.session:
-        return redirect('/')
-# get individual post and get its total likes value
+        return redirect('/login_page')
     context={
         'user':User.objects.get(id = request.session['user_id']),
         'posts':Posts.objects.all().order_by('-created_at'),

@@ -1,6 +1,6 @@
 <!doctype html>
 <html class="no-js" lang="en">
-  <head>
+    <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eat, Sleep, DiscGolf | Welcome</title>
@@ -8,12 +8,13 @@
     {%load static%}
     <link rel="stylesheet" href="{% static 'css/home.css' %}"> 
     <script src="/js/vendor/modernizr.js"></script>
-  </head>
-  <body>
+    </head>
+    <body>
     <div class="callout large primary">
-      <div class="row column text-center">
+        <div class="row column text-center">
         <h1 id="title-text">Eat Sleep DiscGolf</h1>
-        <img id="logo" src="../static/img/basket-BW.png" alt="image of logo">
+        <h3 id="title-text"> {{userPosts.user_name}}</h3>
+        <a href="/home"><img id="logo" src="../static/img/basket-BW.png" alt="image of logo"></a>
         <div class="row column text-center">
             <ul class= "menu">
                 <li><a data-open="CreatePost-Modal">Create Post</a></li>
@@ -23,11 +24,13 @@
             </ul>
         </div>
 
-      </div>
+    </div>
     </div>
 
     <div class="row" id="content">
-      <div class="medium-8 columns">
+        <h1>All posts from {{userPosts.user_name}}</h1>
+        <hr>
+        <div class="medium-8 columns">
         {% for post in posts %}
         <div class="blog-post">
             <h3>{{post.title}} <small>{{post.created_at}}</small></h3>
@@ -38,7 +41,7 @@
             <div class="callout">
                 <ul class="menu simple">
                 <li><a href="#">Author: {{post.posted_by.user_name}}</a></li>
-                <li><form action="/likeOnHome/{{post.id}}" method="POST">
+                <li><form action="/likeOnAllposts/{{post.id}}/{{userPosts.id}}" method="POST">
                     {%csrf_token%}
                     {% if post in user.liked_posts.all %} 
                         <button type="submit", name="post_id", value="{{post_id}}", class="hollow button warning"> Likes:{{post.likes.count}} &#128078</button>

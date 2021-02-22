@@ -21,10 +21,11 @@
             <form action="/create-post" method="POST" enctype="multipart/form-data">
                 {%csrf_token%}
                 <h1>Give your Post a Title</h1>
-                <textarea name="title" id="title" cols="30" rows="10"></textarea>
+                <textarea name="title" id="title" cols="30" rows="2"></textarea>
                 <h1>Write your content below</h1>
-                <!-- {{form.media}} -->
                 <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                <h4>Add header image</h4>
+                <input type="file" name="header_image" id="header_image">
                 <button type="submit">POST</button>
             </form>
             
