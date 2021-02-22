@@ -13,11 +13,11 @@
     <div class="callout large primary">
         <div class="row column text-center">
         <h1 id="title-text">Eat Sleep DiscGolf</h1>
-        <h3 id="title-text"> {{userPosts.user_name}}</h3>
+        <h3 id="title-text"> All posts from {{userPosts.user_name}}</h3>
         <a href="/home"><img id="logo" src="../static/img/basket-BW.png" alt="image of logo"></a>
         <div class="row column text-center">
             <ul class= "menu">
-                <li><a data-open="CreatePost-Modal">Create Post</a></li>
+                <li><a data-open="CreatePost-Modal">Create a Post</a></li>
                 <li><a href="https://www.pdga.com/rules/official-rules-disc-golf/800" target="_blank">How to Play</a></li>  
                 <li><a data-open="About-Modal">About</a></li>
                 <li><a href="/logout">Logout</a></li>
@@ -28,7 +28,6 @@
     </div>
 
     <div class="row" id="content">
-        <h1>All posts from {{userPosts.user_name}}</h1>
         <hr>
         <div class="medium-8 columns">
         {% for post in posts %}
@@ -37,7 +36,7 @@
             {% if post.header_image%}
             <img class="thumbnail" src="/media/{{post.header_image}}">
             {% endif %}
-            <p> {{post.content}} </p>
+            <p> {{post.content | safe}} </p>
             <div class="callout">
                 <ul class="menu simple">
                 <li><a href="#">Author: {{post.posted_by.user_name}}</a></li>
@@ -67,19 +66,7 @@
       </div>
     </div>
 
-    <div class="row column">
-            <ul class="pagination" role="navigation" aria-label="Pagination">
-            <li class="disabled">Previous</li>
-            <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-            <li><a href="#" aria-label="Page 2">2</a></li>
-            <li><a href="#" aria-label="Page 3">3</a></li>
-            <li><a href="#" aria-label="Page 4">4</a></li>
-            <li class="ellipsis"></li>
-            <li><a href="#" aria-label="Page 12">12</a></li>
-            <li><a href="#" aria-label="Page 13">13</a></li>
-            <li><a href="#" aria-label="Next page">Next</a></li>
-        </ul>
-    </div>
+
     <div class="reveal" id="About-Modal" data-reveal>
         <h1>About</h1>
         <p class="lead">Are you someone who is slightly obsessed about disc golf (whether PRO or Ameteur) and you do not have a place to express share thoughts and ideas. Eat, Sleep, DiscGolf is the perfect place to share anything and everything related to disc golf.</p>

@@ -6,7 +6,9 @@
         <title>"a single post"</title>
         <link rel="stylesheet" href="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
         {%load static%}
-        <link rel="stylesheet" href="{% static 'css/home.css' %}"> 
+        <link rel="stylesheet" href="{% static 'css/home.css' %}">
+        <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
     </head>
     <body>
         <header>
@@ -19,18 +21,23 @@
                     <div class="blog-post">
                         <h3>{{post.title}} <small>{{post.created_at}}</small></h3>
                         <img class="thumbnail" src="/media/{{post.header_image}}">
-                        <p>{{post.content}}</p>
+                        <p>{{post.content |safe}}</p>
                         <div class="callout">
                             <ul class="menu simple">
-                            <li><a href="#">Author: {{post.posted_by.user_name}}</a></li>
-                            <li><form action="/likeOnDetails/{{post.id}}" method="POST" class="like-form" id="{{post.id}}">
+                                <li><a href="#">Author: {{post.posted_by.user_name}}</a></li>
+                                <li><form action="/likeOnDetails/{{post.id}}" method="POST" class="like-form" id="{{post.id}}">
                                 {%csrf_token%}
                                 {% if post in user.liked_posts.all %} 
                                     <button type="submit", name="post_id", value="{{post_id}}", class="hollow button warning"> Likes {{post.likes.count}}&#128078</button>
                                 {% else %}                                    
                                     <button type="submit", name="post_id", value="{{post_id}}", class="hollow button success">Likes {{post.likes.count}}&#128077</button>
                                 {% endif %}
-                            </form></li>
+                                </form>
+                                </li>
+                                {% if post in user.user_post.all%}
+                                <li><button data-open="EditPost-Modal" class="success button">Edit</button></li>
+                                <li><button data-open="DeletePost-Modal" class="alert button">Delete</button></li> 
+                                {% endif %}
                             </ul>
                             <h4>Comments</h4>
                             {% if not post.comments.all %}
@@ -51,6 +58,37 @@
                         </div>      
                     </div>
                 </div>
+            </div>
+            <div class="reveal" id="EditPost-Modal" data-reveal>
+                {% if messages %}
+                <ul class="validations">
+                    {% for messages in messages %}
+                    <li {% if message.tags %} class = "{{ message.tags }}"{% endif %}>{{messages}}</li>
+                    {% endfor %}
+                </ul>
+                    {% endif %}
+                <form action="/edit-post/{{post.id}}" method="post" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    <h3>Title</h3>
+                <textarea name="title" id="title" cols="30" rows="1" >{{post.title}}</textarea>
+                <h3>Content</h3>
+                <textarea name="content" id="content" cols="30" rows="10" >{{post.content}}</textarea>
+                <!-- <h4>Add header image</h4>
+                <input type="file" name="header_image" id="header_image"> -->
+                <button class='success button' type="submit">POST</button>
+                </form>
+        
+                <button class="close-button" data-close aria-label="Close modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="reveal" id="DeletePost-Modal" data-reveal>
+                <p>Are you sure you want to delete post?</p>
+                <button class='success button' data-close aria-label="Close modal">Cancel</button>
+                <form action="/delete-post/{{post.id}}" method="post">
+                    {%csrf_token%}
+                    <button class='alert button' type="submit">Delete</button>
+                </form>
             </div>
 
         </main>

@@ -6,7 +6,20 @@ from .models import User, Posts, Comments
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 # Create your views here.
-
+def Delete(request, id):
+    if 'user_id' not in request.session:
+        return redirect('/login')
+    post = Posts.objects.get(id = id)
+    post.delete()
+    return redirect ('/home')
+def EditPost(request, id):
+    if 'user_id' not in request.session:
+        return redirect('/login')
+    post = Posts.objects.get(id = id)
+    post.title = request.POST['title']
+    post.content = request.POST['content']
+    post.save()
+    return redirect (f'/details/{id}')
 def allUsersPosts(request, id):
     if 'user_id' not in request.session:
         return redirect('/login')
@@ -35,7 +48,7 @@ def create_comment(request, id):
 def details(request,id):
     post = Posts.objects.get(id=id)
     current_user = User.objects.get(id = request.session['user_id'])
-    comments = post.comments.order_by('-created_at')
+    comments = post.comments.all()
     context={
         'post' : post,
         'user':current_user,
@@ -143,6 +156,8 @@ def register(request):
 def register_page(request):
     return render(request, "registerLogin.html")
 
+def about(request):
+    return render(request,'about.html')
 def landing_page(request):
     return render(request, 'landing_page.html',{})
 

@@ -4,31 +4,43 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create a Post</title>
+        {% load static %}
+        <link rel="stylesheet" href="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
+        <link rel="stylesheet" href="{% static 'css/home.css' %}">
+        <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
     </head>
     <body>
-        <header>
-        <a href="/home">Return to Homepage</a>
-        <p>{{date}}</p>
-        </header>
-        <main>
-                {% if messages %}
-            <ul class="validations">
-                {% for messages in messages %}
-                <li {% if message.tags %} class = "{{ message.tags }}"{% endif %}>{{messages}}</li>
-                {% endfor %}
-            </ul>
-                {% endif %}
-            <form action="/create-post" method="POST" enctype="multipart/form-data">
-                {%csrf_token%}
-                <h1>Give your Post a Title</h1>
-                <textarea name="title" id="title" cols="30" rows="2"></textarea>
-                <h1>Write your content below</h1>
-                <textarea name="content" id="content" cols="30" rows="10"></textarea>
-                <h4>Add header image</h4>
-                <input type="file" name="header_image" id="header_image">
-                <button type="submit">POST</button>
-            </form>
-            
-        </main>
+        <div id="container">
+            <header>
+                <a href="/home">Return to Homepage</a>
+                </header>
+                <main>
+                        <div class="row" id="content">
+                            <div class="row">
+                                {% if messages %}
+                                <ul class="validations">
+                                    {% for messages in messages %}
+                                    <li {% if message.tags %} class = "{{ message.tags }}"{% endif %}>{{messages}}</li>
+                                    {% endfor %}
+                                </ul>
+                                    {% endif %}
+                            </div>
+                            <div class="small-12 columns">
+                                <form action="/create-post" method="POST" enctype="multipart/form-data">
+                                    {%csrf_token%}
+                                    <h3>Give your Post a Title</h3>
+                                    <textarea name="title" id="title" cols="30" rows="2"></textarea>
+                                    <h3>Write your content below</h3>
+                                    <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                                    <h4>Add header image</h4>
+                                    <input type="file" name="header_image" id="header_image">
+                                    <button class="primary button" type="submit">POST</button>
+                                </form>
+                            </div>
+                        </div>
+                </main>
+        </div>
+        
     </body>
 </html>
